@@ -1,0 +1,16 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^16.6.1",
+		"nodemon": "^2.0.12",
+		"typescript": "^4.3.5"
+	},
+	"scripts": {
+		"watch": "tsc -w",
+		"start": "node dist/index.js",
+		"dev": "nodemon dist/index.js"
+	}
+}
