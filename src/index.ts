@@ -12,7 +12,7 @@ import { UserResolver } from "./resolvers/user";
 import { __prod__ } from "./constants";
 import { MyContext } from "./types";
 import mikroOrmConfig from "./mikro-orm.config";
-import cors from "cors";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 const main = async () => {
 	const orm = await MikroORM.init(mikroOrmConfig);
@@ -24,13 +24,6 @@ const main = async () => {
 	const redisClient = redis.createClient();
 
 	app.use(
-		cors({
-			origin: "https://studio.apollographql.com",
-			credentials: true,
-		})
-	);
-
-	app.use(
 		session({
 			name: "qid",
 			store: new RedisStore({
@@ -40,8 +33,8 @@ const main = async () => {
 			cookie: {
 				maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
 				httpOnly: true,
-				sameSite: "none",
-				secure: true,
+				sameSite: "lax",
+				secure: __prod__,
 			},
 			saveUninitialized: false,
 			secret: "keyboard cat",
@@ -55,12 +48,15 @@ const main = async () => {
 			validate: false,
 		}),
 		context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+		plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 	});
 
 	await apolloServer.start();
 	apolloServer.applyMiddleware({
 		app,
-		cors: false,
+		cors: {
+			credentials: true,
+		},
 	});
 
 	app.listen(4000, () => {
