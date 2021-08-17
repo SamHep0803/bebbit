@@ -13,6 +13,7 @@ import { __prod__ } from "./constants";
 import { MyContext } from "./types";
 import mikroOrmConfig from "./mikro-orm.config";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import cors from "cors";
 
 const main = async () => {
 	const orm = await MikroORM.init(mikroOrmConfig);
@@ -22,6 +23,13 @@ const main = async () => {
 
 	const RedisStore = connectRedis(session);
 	const redisClient = redis.createClient();
+
+	app.use(
+		cors({
+			origin: "http://localhost:3000",
+			credentials: true,
+		})
+	);
 
 	app.use(
 		session({
@@ -54,9 +62,7 @@ const main = async () => {
 	await apolloServer.start();
 	apolloServer.applyMiddleware({
 		app,
-		cors: {
-			credentials: true,
-		},
+		cors: false,
 	});
 
 	app.listen(4000, () => {

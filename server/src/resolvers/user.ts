@@ -52,7 +52,7 @@ export class UserResolver {
 	}
 
 	@Mutation(() => UserResponse)
-	async registerUser(
+	async register(
 		@Arg("options") options: UsernamePasswordInput,
 		@Ctx() { em, req }: MyContext
 	): Promise<UserResponse> {
@@ -89,7 +89,7 @@ export class UserResolver {
 	}
 
 	@Mutation(() => UserResponse)
-	async loginUser(
+	async login(
 		@Arg("options") options: UsernamePasswordInput,
 		@Ctx() { em, req }: MyContext
 	): Promise<UserResponse> {
