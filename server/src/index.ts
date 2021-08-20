@@ -1,19 +1,19 @@
-import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import express from "express";
-import redis from "redis";
-import session from "express-session";
 import connectRedis from "connect-redis";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import redis from "redis";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { COOKIE_NAME, __prod__ } from "./constants";
+import mikroOrmConfig from "./mikro-orm.config";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import { COOKIE_NAME, __prod__ } from "./constants";
 import { MyContext } from "./types";
-import mikroOrmConfig from "./mikro-orm.config";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import cors from "cors";
 
 const main = async () => {
 	const orm = await MikroORM.init(mikroOrmConfig);
